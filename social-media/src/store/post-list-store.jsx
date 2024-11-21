@@ -1,26 +1,65 @@
 import { createContext, useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export const PostList = createContext({
   postList: [],
   addPost: () => {},
+  addIniPosts: () => {},
   deletePost: () => {},
 });
 
 const postListReducer = (currPostList, action) => {
-  return currPostList;
+  let newPostList = currPostList;
+  if (action.type === "DELETE_POST") {
+    newPostList = currPostList.filter(
+      (post) => post.id !== action.payload.postId
+    );
+  } else if (action.type === "ADD_POST") {
+    newPostList = [action.payload, ...currPostList];
+  } else if (action.type === "ADD_INI_POSTS") {
+    newPostList = action.payload.posts;
+  }
+
+  return newPostList;
 };
 
 const PostListProvider = ({ children }) => {
-  const addPost = () => {};
-  const deletePost = () => {};
+  const [postList, dispatchPostList] = useReducer(postListReducer, []);
 
-  const [postList, dispatchPostList] = useReducer(
-    postListReducer,
-    DEFAULT_POST_LIST
-  );
+  const addPost = (userId, username, title, Body, reactions, tags) => {
+    const postID = uuidv4();
+    dispatchPostList({
+      type: "ADD_POST",
+      payload: {
+        id: postID,
+        Username: username,
+        title: title,
+        body: Body,
+        reactions: reactions,
+        UserId: userId,
+        Tags: tags,
+      },
+    });
+  };
+  const addIniPosts = (posts) => {
+    dispatchPostList({
+      type: "ADD_INI_POSTS",
+      payload: {
+        posts,
+      },
+    });
+  };
+  const deletePost = (postId) => {
+    dispatchPostList({
+      type: "DELETE_POST",
+      payload: {
+        postId,
+      },
+    });
+  };
 
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost }}>
+    <PostList.Provider value={{ postList, addPost, deletePost, addIniPosts }}>
       {children}
     </PostList.Provider>
   );

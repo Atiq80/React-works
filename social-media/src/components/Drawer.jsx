@@ -36,22 +36,12 @@ const Drawer = () => {
             </a>
           </div>
           <li onClick={() => setSelectedTab("Home")}>
-            <a
-              className={`${
-                selectedTab === "Home" &&
-                "bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-20  hover:rounded-lg hover:shadow-md rounded-lg shadow-md"
-              }`}
-            >
+            <a className={`${selectedTab === "Home" && " btn-active "}`}>
               Home
             </a>
           </li>
           <li onClick={() => setSelectedTab("Create Post")}>
-            <a
-              className={`${
-                selectedTab === "Create Post" &&
-                "bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-20  hover:rounded-lg hover:shadow-md rounded-lg shadow-md"
-              }`}
-            >
+            <a className={`${selectedTab === "Create Post" && " btn-active"}`}>
               Create Post
             </a>
           </li>
